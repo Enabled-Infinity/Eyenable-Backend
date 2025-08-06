@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey, Enum
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey, Enum, UniqueConstraint
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker,relationship,declarative_base
 from datetime import datetime
@@ -97,6 +97,9 @@ class Channel(Base):
     credentials = relationship("APICredentials", back_populates="channels")
     # Relationship with User
     user = relationship("User", back_populates="channels")
+    
+    # Unique constraint for user_id and channel_type combination
+    __table_args__ = (UniqueConstraint('user_id', 'channel_type', name='unique_user_channel'),)
 
     
     def __str__(self):
